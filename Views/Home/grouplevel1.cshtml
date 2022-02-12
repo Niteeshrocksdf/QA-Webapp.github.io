@@ -1,0 +1,214 @@
+﻿@{
+    ViewBag.Title = "Qlevel1";
+}
+
+
+
+<link href="~/Content/Datatable/Bootstrap_datatable.css" rel="stylesheet" />
+<link href="~/Content/Datatable/Responsive_datatable.css" rel="stylesheet" />
+<style>
+    td {
+        word-break: break-all;
+        font-size: 14px;
+    }
+
+    .card {
+        /* Add shadows to create the "card" effect */ box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+    }
+
+    .welheader {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 20px;
+        padding-top: 4px;
+    }
+
+    .home-kb-search {
+        margin-bottom: 30px;
+    }
+
+    #sidebar ul li.active > a, a[aria-expanded="true"] {
+        color: #fff;
+        background: none;
+    }
+
+    .center-circle {
+        position: fixed;
+        margin: 0 auto;
+        top: 450px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1;
+    }
+</style>
+
+<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 card" style="height:70px;background-color:ghostwhite;border-top:2px solid #50525f;margin-top:-30px;">
+
+    <div>
+        <span class="welheader"><b>Question Group Level-1</b></span>
+        <div>
+            <span>HOME / <span style="color: #4285f4;">QUESTION GROUP LEVEL-1</span></span>
+            <a href="/Home/grouplevel2" style="float:right;text-decoration:underline;color:deepskyblue;font-size:20px;">Next Group Level <i class="glyphicon glyphicon-arrow-right"></i></a>
+
+        </div>
+    </div>
+</div>
+
+<br />
+
+
+<div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+    <div class="row">
+        <div class="col-md-4 col-lg-4 col-xs-4 col-sm-4">
+        </div>
+        <div class="col-md-4 col-lg-4 col-xs-4 col-sm-4" style="min-height:120px;">
+            <div style="margin-top:10px;">
+                <label style="float:left;margin-top:5px;margin-right:5px;">Name :</label>
+                <input id="qgrplev1" type="text" class="form-control" placeholder="Enter Name" style="text-transform:capitalize" maxlength="50" onkeypress="remove();" />
+                <input type="hidden" id="lev1id" />
+                <span id="errqgrp1" style="color:red;margin-left:50px;"></span>
+            </div>
+            <div>
+                <input type="submit" id="qgrp1btn" style="background-color: #4285f4; border: none; color: white; padding: 12px 28PX; text-align: center; text-decoration: none; display: inline-block; margin-left: 50px;  font-size: 12px; border-radius: 5px; " value="Submit" onclick="Qgrplv1();" />
+                <input type="submit" id="" style="background-color: #4285f4; border: none; color: white; padding: 12px 28PX; text-align: center; text-decoration: none; display: inline-block; margin-left: 50px;  font-size: 12px; border-radius: 5px; " value="Cancel" onclick="clearlev1();" />
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-4 col-xs-4 col-sm-4">
+        </div>
+    </div>
+
+    <div class="row" style="margin-top:20px;">
+        <div class="col-md-3 col-lg-3 col-xs-3 col-sm-3">
+
+        </div>
+        <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6" style="min-height:300px;">
+            <table id="lev1" class="table table-striped table-bordered dt-responsive " style="width:100%">
+                <thead style="background-color: #4285f4 !important; color: white; font-size: 14px">
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+
+        </div>
+        <div class="col-md-3 col-lg-3 col-xs-3 col-sm-3">
+
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+        $("#loader").hide();
+        load();
+    });
+
+    function load() {
+        $("#lev1").DataTable({
+            // stateSave: true,
+            "bDestroy": true,
+            "pageLength": 5,
+            "ajax": {
+                "url": "/Home/getqlev1/",
+                "type": "POST",
+                "datatype": "json"
+            },
+
+            "columns": [
+                {
+                    "data": "Name", "name": "Name", "Width": "5%"
+                },
+                {
+                    "data": "Action", "name": "Action", "autoWidth": true,
+                    "render": function (data, type, row, meta) {
+                        return '<img src = "/Images/edit.png" onclick = "leve1Edit(\'' + row.Code + '\')"  style = "cursor: pointer;" title="Edit"> <img src = "/Images/delete-sign.png" onclick = "lev1Delete(\'' + row.Code + '\')"  style = "cursor: pointer;margin-left:20px;" title="Delete">';
+                    }
+                },
+            ]
+
+        });
+    }
+
+
+    function leve1Edit(id) {
+
+        $.ajax({
+            type: 'POST',
+            url: "/Home/editqlev1?id=" + id,
+            success: function (resultData) {
+                $("#qgrplev1").val(resultData.data.Name);
+                $("#lev1id").val(resultData.data.Code);
+                $("#qgrp1btn").val("Update");
+            }
+        });
+    }
+
+    function lev1Delete(id) {
+        if (confirm('Are you sure to delete ?')) {
+            $.ajax({
+                type: 'POST',
+                url: "/Home/deletqlev1?id=" + id,
+                success: function (resultData) {
+                    $("#loader").hide();
+                    $("#qgrplev1").val("");
+                    clearlev1();
+                    load();
+                    if (resultData.data != "") {
+                        alert(resultData.data);
+
+                    }
+                }
+            });
+        }
+    }
+
+    function Qgrplv1() {
+        var name = $("#qgrplev1").val();
+        var id = $("#lev1id").val();
+        if (name == "") {
+            $("#errqgrp1").html("Name Should not be blank !..");
+            return false;
+        }
+        //To save data using ajax
+        $.ajax({
+            type: 'POST',
+            url: "/Home/SaveQuestionGrpLevel1?name=" + name + "&id=" + id,
+            success: function (resultData) {
+
+                if (resultData.success != null) {
+                    alert(resultData.success);
+                }
+                $("#lev1id").val("");
+                $("#qgrplev1").val("");
+                $("#qgrp1btn").val("Submit");
+                load();
+
+
+            }
+        });
+
+    }
+
+    function clearlev1() {
+        $("#qgrplev1").val("");
+        $("#qgrp1btn").val("Submit");
+        $("#lev1id").val("");
+    }
+
+    function remove() {
+        $("#errqgrp1").html("");
+
+    }
+
+</script>

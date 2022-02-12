@@ -1,0 +1,266 @@
+﻿
+@{
+    ViewBag.Title = "grouplevel2";
+}
+<link href="~/Content/Datatable/Bootstrap_datatable.css" rel="stylesheet" />
+<link href="~/Content/Datatable/Responsive_datatable.css" rel="stylesheet" />
+<style>
+    td {
+        word-break: break-all;
+        font-size: 14px;
+    }
+
+    .card {
+        /* Add shadows to create the "card" effect */ box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+    }
+
+    .welheader {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 20px;
+        padding-top: 4px;
+    }
+
+    .home-kb-search {
+        margin-bottom: 30px;
+    }
+
+    #sidebar ul li.active > a, a[aria-expanded="true"] {
+        color: #fff;
+        background: none;
+    }
+
+    .center-circle {
+        position: fixed;
+        margin: 0 auto;
+        top: 450px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1;
+    }
+</style>
+
+<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 card" style="height:70px;background-color:ghostwhite;border-top:2px solid #50525f;margin-top:-30px;">
+
+    <div>
+        <span class="welheader"><b>Question Group Level-2</b></span>
+        <div>
+            <span>HOME / <span style="color: #4285f4;">QUESTION GROUP LEVEL-2</span></span>
+            <span style="float:right;">
+                <a href="/Home/grouplevel1" style="text-decoration:underline;color:deepskyblue;font-size:20px;"><i class="glyphicon glyphicon-arrow-left"></i>&nbsp; Previous Group Level </a>
+            </span>
+
+
+        </div>
+    </div>
+</div>
+
+<br />
+<!--Loader-->
+<img src="~/Images/ajax-loader (4).gif" id="loader" class="center-circle" />
+<!---->
+
+
+<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
+    <div class="row">
+
+        <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
+            <div style="float:right">
+                <label style="float:left;margin-top:5px;margin-right:5px;">Ques Group Level-1 :</label>
+                <select id="qgrpopt1" style="text-transform:capitalize" class="form-control">
+                    <option>
+                        --Select--
+                    </option>
+                    @*@foreach (var lst in ViewBag.qgrplv1)
+                    {
+                        <option style="text-transform:capitalize" value="@lst.Code">@lst.Name</option>
+
+                    }*@
+
+                </select>
+                <span id="errqgrpopt1" style="color:red;"></span>
+            </div>
+
+        </div>
+        <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
+            <div style="float:left">
+                <label style="float:left;margin-top:5px;margin-right:5px;">Name :</label>
+                <input id="qgrplevel2" type="text" class="form-control" placeholder="Enter Name" style="text-transform:capitalize" maxlength="50" />
+                <span id="errqgrp2" style="color:red;"></span>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="row">
+        <div style="text-align:center;">
+            <input type="submit" id="qgrp2btn" style="background-color: #4285f4; border: none; color: white; padding: 12px 28PX; text-align: center; text-decoration: none; display: inline-block; margin-left: 15px;  font-size: 12px; border-radius: 5px; " value="Submit" onclick="Qgrplv2();" />
+            <input type="submit" id="" style="background-color: #4285f4; border: none; color: white; padding: 12px 28PX; text-align: center; text-decoration: none; display: inline-block; margin-left: 15px;  font-size: 12px; border-radius: 5px; " value="Cancel" onclick="Cleargrp2();" />
+            <input type="hidden" id="qlev2" />
+        </div>
+    </div>
+    <div class="row" style="margin-top:20px;">
+        <div class="col-md-3 col-lg-3 col-xs-3 col-sm-3">
+
+        </div>
+        <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6" style="min-height:300px;">
+            <table id="lev2" class="table table-striped table-bordered dt-responsive " style="width:100%">
+                <thead style="background-color: #4285f4 !important; color: white; font-size: 14px">
+                    <tr>
+                        <th>
+                            Q Level-1
+                        </th>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+
+        </div>
+        <div class="col-md-3 col-lg-3 col-xs-3 col-sm-3">
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        load();
+        $("#loader").hide();
+    });
+
+
+
+    function load() {
+        $("#lev2").DataTable({
+            //stateSave: true,
+            "bDestroy": true,
+            "pageLength": 5,
+            "ajax": {
+                "url": "/Home/getqlev2/",
+                "type": "POST",
+                "datatype": "json"
+            },
+
+            "columns": [
+                {
+                    "data": "Level_1_Code", "name": "Level_1_Code", "Width": "5%"
+                },
+                {
+                    "data": "Name", "name": "Name", "Width": "5%"
+                },
+                {
+                    "data": "Action", "name": "Action", "autoWidth": true,
+                    "render": function (data, type, row, meta) {
+                        return '<img src = "/Images/edit.png" onclick = "leve2Edit(\'' + row.Code + '\')"  style = "cursor: pointer;" title="Edit"> <img src = "/Images/delete-sign.png" onclick = "lev2Delete(\'' + row.Code + '\')"  style = "cursor: pointer;margin-left:20px;" title="Delete">';
+                    }
+                },
+            ]
+
+        });
+    }
+
+
+    function leve2Edit(id) {
+
+        $.ajax({
+            type: 'POST',
+            url: "/Home/editqlev2?id=" + id,
+            success: function (resultData) {
+                $("#qgrpopt1").val(resultData.data.Level_1_Code);
+                $("#qgrplevel2").val(resultData.data.Name);
+                $("#qlev2").val(resultData.data.Code);
+                $("#qgrp2btn").val("Update");
+
+            }
+        });
+    }
+
+    function lev2Delete(id) {
+        if (confirm('Are you sure to delete ?'))
+        {
+            $.ajax({
+                type: 'POST',
+                url: "/Home/deletqlev2?id=" + id,
+                success: function (resultData) {
+                    $("#loader").hide();
+                    $("#qgrplev1").val("");
+                    Cleargrp2();
+                    load();
+                    if (resultData.data != "") {
+                        alert(resultData.data);
+
+                    }
+                }
+            });
+        }
+    }
+
+
+
+
+    $(document).keypress(function (event) {
+        $("#errqgrp2").html("");
+    });
+
+    $(document).change(function (event) {
+        $("#errqgrpopt1").html("");
+    });
+
+
+
+    function Qgrplv2() {
+        var id = $("#qlev2").val();
+        var name = $("#qgrplevel2").val();
+        var qgrpopt1 = $("#qgrpopt1").val();
+
+        if (qgrpopt1 == "--Select--") {
+            $("#errqgrpopt1").html("Ques group level-1 Should not be blank !..");
+            return false;
+        }
+        if (name == "") {
+            $("#errqgrp2").html("Name Should not be blank !..");
+            return false;
+        }
+        // To save data using ajax
+        $.ajax({
+            type: 'POST',
+            url: "/Home/SaveQuestionGrpLevel2?name=" + name + "&qgrplv1=" + qgrpopt1 + "&id=" + id,
+            success: function (resultData) {
+                if (resultData.success != null) {
+                    alert(resultData.success);
+                }
+                $("#qgrplevel2").val("");
+                $("#qgrpopt1").val("--Select--");
+                $("#qgrp2btn").val("Submit");
+                $("#qlev2").val("");
+                load();
+               // alert("Save Succesfully...");
+            }
+        });
+
+    }
+
+    function Cleargrp2() {
+        $("#qgrpopt1").val("--Select--");
+        $("#qgrplevel2").val("");
+        $("#qgrp2btn").val("Submit");
+        $("#qlev2").val("");
+    }
+
+</script>

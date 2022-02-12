@@ -1,0 +1,642 @@
+﻿
+@{
+    ViewBag.Title = "Security";
+}
+
+<link href="~/Content/Datatable/Bootstrap_datatable.css" rel="stylesheet" />
+<link href="~/Content/Datatable/Responsive_datatable.css" rel="stylesheet" />
+<style>
+    .card {
+        /* Add shadows to create the "card" effect */ box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.1s;
+    }
+
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 15px;
+        height: 25px;
+        width: 25px;
+        background-color: #eee;
+    }
+
+    /*div.dataTables_wrapper div.dataTables_filter {
+        text-align: right;
+        display: none;
+    }*/
+
+    .invalid {
+        border: 2px solid red;
+    }
+
+    label {
+        display: inline-block;
+        max-width: 100%;
+        margin-bottom: 5px;
+        font-weight: 700;
+    }
+
+    .center-circle {
+        position: fixed;
+        margin: 0 auto;
+        bottom: 200px;
+        left: 0;
+        right: 0;
+        z-index: 1;
+    }
+
+    .welheader {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 20px;
+        padding-top: 4px;
+    }
+</style>
+
+
+<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 card" style="height:70px;background-color:ghostwhite;border-top:2px solid #50525f;margin-top:-30px;">
+
+    <div>
+        <span class="welheader"><b>Security</b></span>
+        <div>
+            <span>HOME / <span style="color: #4285f4;text-transform:uppercase">Security</span></span>
+        </div>
+    </div>
+</div>
+
+<br />
+
+
+<div class="col-md-12 col-sm-12 col-xs-12 card " style="background-color:white;min-height:85vh ;border-top:2px solid gray">
+
+    <!--Loader-->
+    <img src="~/Images/ajax-loader (4).gif" id="loader" class="center-circle" />
+    <!---->
+
+    <h3 style="font-family:sans-serif;font-size:18px;margin-top:5px;">Login User Detail</h3>
+    <hr style="margin-top:-2px;" />
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="col-md-3">
+            <label>
+                Full Name
+            </label>
+            <input id="username" type="text" class="form-control" maxlength="20" placeholder="Enter User Name..." />
+            <input type="hidden" id="hidd" />
+            <span id="usernameerr" style="font-size:0.9em;color:red"></span>
+        </div>
+        <div class="col-md-3">
+            <label>
+                Login Id
+            </label>
+            <input id="loginid" type="text" class="form-control" maxlength="20" placeholder="Enter Login Id" />
+            <span id="loginerr" style="font-size:0.9em;color:red"></span>
+        </div>
+
+        <div class="col-md-3">
+            <label>
+                Email Id
+            </label>
+            <input id="emailid" type="text" class="form-control" maxlength="50" placeholder="Enter Email Id" />
+            <span id="emailerr" style="font-size:0.9em;color:red"></span>
+        </div>
+        <div class="col-md-3">
+            <label>
+                Role
+            </label>
+            <select id="selectroleid" class="form-control">
+                <option value="Admin">Admin</option>
+                <option value="Admin">Approver</option>
+                <option value="Admin">Inspector</option>
+                <option value="Admin">Client</option>
+            </select>
+            <span id="roleerr" style="font-size:0.9em;color:red"></span>
+        </div>
+
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12" style="top:0px;float:left">
+        <div class="col-md-3">
+            <label>
+                Passowrd
+            </label>
+            <input id="pwdid" type="password" class="form-control" maxlength="20" placeholder="Enter Password" />
+            <span id="pwderr" style="font-size:0.9em;color:red"></span>
+        </div>
+
+        <div class="col-md-3">
+            <label>
+                Confirm Passowrd
+            </label>
+            <input id="cpwdid" type="password" class="form-control" maxlength="20" placeholder="Confirm Password" />
+            <span id="cpwderr" style="font-size:0.9em;color:red"></span>
+        </div>
+        <div class="col-md-3">
+            <label>
+                Active
+            </label>
+            <input id="activeid" type="checkbox" class="form-control" style="width:10%" />
+        </div>
+
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12" style="top:0px;">
+        <div class="col-md-6">
+            <input type="submit" id="usave" style="background-color: #4285f4 !important; border: none; float: right; color: white; padding: 10px 28px; text-align: center; text-decoration: none; display: inline-block; margin-left: 5px; font-size: 12px;border-radius:5px;" value="Save" onclick="Save();" />
+        </div>
+        <div class="col-md-6">
+            <input type="submit" id="ucancel" style="background-color: #4285f4 !important; border: none; color: white; padding: 10px 28px; text-align: center; text-decoration: none; display: inline-block; margin-left: 5px; font-size: 12px; border-radius: 5px;" value="Cancel" onclick="Cancel();" />
+        </div>
+
+    </div>
+
+
+    <div style="margin-top:19%;">
+        <div class="col-md-12" style="border-top: 2px solid gray;">
+            <div class="col-md-6">
+
+            </div>
+            <div class="col-md-6" style="margin-top:5px;">
+                <input id="exportExcel" type="submit" style="background-color: #4285f4 !important; border: none; color: white; padding: 10px 28px; text-align: center; text-decoration: none; display: inline-block; margin-left: 5px; font-size: 12px; float: right;border-radius:5px; " value="Export to Excel" onclick="Export();" />
+                <input id="adduser" type="submit" style="background-color: #4285f4 !important; border: none; float: right; color: white; padding: 10px 28px; text-align: center; text-decoration: none; display: inline-block; margin-left: 5px; font-size: 12px; border-radius: 5px; " value="Add User" onclick="newUser();" />
+
+                <script>
+                    function newUser() {
+                        Cancel();
+
+                        $("usave").val("Save");
+                        $("input").prop("disabled", false);
+                        $("select").prop("disabled", false);
+                    }
+                </script>
+
+            </div>
+
+        </div>
+    </div>
+    <div>
+    </div>
+    <div class="col-md-12" style="margin-top:50px">
+        <table id="usertbl" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%;margin-top:15px;">
+            <thead>
+                <tr>
+                    <th>
+                        Full Name
+                    </th>
+                    <th>
+                        Login ID
+                    </th>
+                    <th>
+                        Email Id
+                    </th>
+                    @*<th>
+                            Password
+                        </th>*@
+                    <th>
+                        Roles
+                    </th>
+                    <th>
+                        Active
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </thead>
+        </table>
+
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $("input").prop("disabled", true);
+        $("select").prop("disabled", true);
+        $("#exportExcel").prop("disabled", false);
+        $("#adduser").prop("disabled", false);
+        load();
+        $("#loader").hide();
+    });
+
+    $(document).keypress(function () {
+        $("#username").removeClass("invalid");
+        $("#usernameerr").html("");
+
+        $("#loginid").removeClass("invalid");
+        $("#loginerr").html("");
+
+        $("#emailid").removeClass("invalid");
+        $("#emailerr").html("");
+
+
+        $("#pwdid").removeClass("invalid");
+        $("#pwderr").html("");
+
+        $("#cpwdid").removeClass("invalid");
+        $("#cpwderr").html("");
+
+    });
+
+    $("#selectroleid").click(function () {
+
+        $("#selectroleid").removeClass("invalid");
+        $("#roleerr").html("");
+        return false;
+
+
+    });
+
+
+    function Save() {
+        var buttonText = $("#usave").val();
+        if (buttonText == "Save") {
+            var username = $("#username").val();
+            var uid = $("#loginid").val();
+            var uid = uid.replace(/\s/g, "");
+            var email = $("#emailid").val();
+            var rol = $("#selectroleid").val();
+            var pw = $("#pwdid").val();
+            var cpw = $("#cpwdid").val();
+            var activeid = "";
+            if ($("#activeid").prop('checked') == true) {
+                activeid = "on";
+            }
+            else {
+                activeid = "off";
+            }
+
+            if (username == "") {
+
+                $("#usernameerr").html("User Name should not blank!");
+                $("#username").addClass("invalid");
+                $("#username").focus();
+
+                return false;
+
+            }
+
+
+
+            if (uid == "") {
+                $("#loginerr").html("Login Id should not blank!");
+                $("#loginid").addClass("invalid");
+                $("#loginid").focus();
+                return false;
+            }
+            //if (Emid == "") {
+            //    $("#emailerr").html("Email should not blank!");
+            //    $("#emailid").addClass("invalid");
+            //    $("#emailid").focus();
+            //    return false;
+            //}
+
+            if (email != "") {
+                if (/^\w+([\.-]?\w+)*@@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+                }
+                else {
+                    $("#emailid").addClass("invalid");
+                    $("#emailerr").html("Email Id is not Valid !");
+                    $("#emailid").focus();
+                    return false;
+                }
+            }
+            else {
+                $("#emailid").addClass("invalid");
+                $("#emailerr").html("Email Id should not blank !");
+                $("#emailid").focus();
+
+                return false;
+            }
+
+
+            if (rol == null) {
+                $("#roleerr").html("Select Role!");
+                $("#selectroleid").addClass("invalid");
+                $("#selectroleid").focus();
+                return false;
+            }
+            if (pw == "") {
+                $("#pwderr").html("Password should not blank!");
+                $("#pwdid").addClass("invalid");
+                $("#pwdid").focus();
+                return false;
+            }
+            if (cpw == "") {
+                $("#cpwderr").html("Confirm Password should not blank!");
+                $("#cpwdid").addClass("invalid");
+                $("#cpwdid").focus();
+                return false;
+            }
+            if (pw != cpw) {
+                $("#cpwderr").html("Confirm Password didn't match!");
+                $("#cpwdid").addClass("invalid");
+                $("#cpwdid").focus();
+                return false;
+            }
+            $("#loader").show();
+
+            //To save data using ajax
+            $.ajax({
+                type: 'POST',
+                url: "/Home/SaveSecurity?fullname=" + username + "&loginid=" + uid + "&email=" + email + "&role=" + rol + "&password=" + pw + "&active=" + activeid,
+                success: function (resultData) {
+                    $("#loader").hide();
+                    if (resultData.success == "Created") {
+                        load();
+                        $("#username").val("");
+                        $("#loginid").val("");
+                        $("#emailid").val("");
+                        $("#selectroleid").val("--Select--");
+                        $("#pwdid").val("");
+                        $("#cpwdid").val("");
+                        $("#activeid").prop("checked", false);
+                        Cancel();
+                    }
+                    if (resultData.success == "Login Id is already Exist...!") {
+                        $("#loginerr").html("Login Id is already Exist!");
+                        $("#loginid").focus();
+                    }
+                    if (resultData.success == "This email already associated with another login id..!") {
+                        $("#emailerr").html("This email already associated with another login id..!");
+                        $("#emailid").focus();
+                    }
+
+                }
+            });
+        }
+        else {
+
+            var id = $("#hidd").val();
+            var username = $("#username").val();
+            var uid = $("#loginid").val();
+            var email = $("#emailid").val();
+            var rol = $("#selectroleid").val();
+            var pw = $("#pwdid").val();
+            var cpw = $("#cpwdid").val();
+            var activeid = "";
+            if ($("#activeid").prop('checked') == true) {
+                activeid = "on";
+            }
+            else {
+                activeid = "off";
+            }
+
+            if (username == "") {
+                $("#usernameerr").html("User Name should not blank!");
+                $("#username").addClass("invalid");
+                $("#username").focus();
+
+                return false;
+            }
+
+
+            if (uid.trim() == "") {
+                $("#loginerr").html("Login Id should not blank!");
+                $("#loginid").addClass("invalid");
+                $("#loginid").focus();
+                return false;
+            }
+            //if (Emid == "") {
+            //    $("#emailerr").html("Email should not blank!");
+            //    $("#emailid").addClass("invalid");
+            //    $("#emailid").focus();
+            //    return false;
+            //}
+
+            if (email != "") {
+                if (/^\w+([\.-]?\w+)*@@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+                }
+                else {
+                    $("#emailid").addClass("invalid");
+                    $("#emailerr").html("Email Id is not Valid !");
+                    $("#emailid").focus();
+                    return false;
+                }
+            }
+            else {
+                $("#emailid").addClass("invalid");
+                $("#emailerr").html("Email Id should not blank !");
+                $("#emailid").focus();
+
+                return false;
+            }
+
+
+            if (rol == "--Select--") {
+                $("#roleerr").html("Select Role!");
+                $("#selectroleid").addClass("invalid");
+                $("#selectroleid").focus();
+                return false;
+            }
+            if (pw == "") {
+                $("#pwderr").html("Password should not blank!");
+                $("#pwdid").addClass("invalid");
+                $("#pwdid").focus();
+                return false;
+            }
+            if (cpw == "") {
+                $("#cpwderr").html("Confirm Password should not blank!");
+                $("#cpwdid").addClass("invalid");
+                $("#cpwdid").focus();
+                return false;
+            }
+            if (pw != cpw) {
+                $("#cpwderr").html("Confirm Password didn't match!");
+                $("#cpwdid").addClass("invalid");
+                $("#cpwdid").focus();
+                return false;
+            }
+            $("#loader").show();
+
+            //To Update data using ajax
+            $.ajax({
+                type: 'POST',
+                url: "/Home/UpdateSecurity?id=" + id + "&fullname=" + username + "&loginid=" + uid + "&email=" + email + "&role=" + rol + "&password=" + pw + "&active=" + activeid,
+                success: function (resultData) {
+                    $("#loader").hide();
+                    if (resultData.success == "Created") {
+                        load();
+                        $("#loginid").prop("disabled", false);
+                        $("#hidd").val("");
+                        $("#usave").val("Save");
+                        $("#username").val("");
+                        $("#loginid").val("");
+                        $("#emailid").val("");
+                        $("#selectroleid").val("--Select--");
+                        $("#pwdid").val("");
+                        $("#cpwdid").val("");
+                        $("#activeid").prop("checked", false);
+                        Cancel();
+                    }
+                    else {
+                        $("#usave").val("Save");
+                        $("#loginerr").html("Login Id is already Exist!");
+                        $("#loginid").focus();
+                    }
+
+                }
+            });
+
+        }
+
+    }
+
+
+
+
+
+    function load() {
+        debugger;
+        $("#usertbl").DataTable({
+            stateSave: true,
+            "bDestroy": true,
+
+            "ajax": {
+                "url": "/Home/GetUser",
+                "type": "POST",
+                "datatype": "json"
+            },
+
+
+
+            "columns": [
+                { "data": "Full_Name", "name": "Full_Name", "autoWidth": true },
+                { "data": "Login_Id", "name": "Login_Id", "autoWidth": true },
+                { "data": "Email_Id", "title": "Email_Id", "name": "Email_Id", "autoWidth": true },
+                //{
+                //    "data": "Password", "name": "Password", "autoWidth": true,
+                //    "render": function (data, type, row, meta) {
+                //        return row.Password ;
+                //    }
+
+                //},
+                { "data": "Roles", "name": "Roles", "autoWidth": true },
+                {
+                    "data": "Active", "name": "Active", "Width": "10px;",
+                    "render": function (data, type, row, meta) {
+                        if (row.Active == true) {
+                            return '<img src="https://img.icons8.com/emoji/20/000000/green-circle-emoji.png"/>';
+                        }
+                        else {
+                            return '<img src="https://img.icons8.com/emoji/20/000000/red-circle-emoji.png"/>'
+                        }
+
+                    }
+                },
+                {
+                    "data": "Action", "name": "Action", "autoWidth": true,
+                    "render": function (data, type, row, meta) {
+                        return '<img src = "/Images/edit.png" onclick = "userEdit(\'' + row.Id + '\')"  style = "cursor: pointer;" title="Edit"> <img src = "/Images/delete-sign.png" onclick = "userDelete(\'' + row.Id + '\')"  style = "cursor: pointer;margin-left:20px;" title="Delete">';
+                    }
+
+                },
+
+
+            ]
+
+        });
+    }
+
+
+    function userEdit(Id) {
+        $("#loader").show();
+        $.ajax({
+            type: 'POST',
+            url: "/Home/EditEntry?Id=" + Id,
+            success: function (resultData) {
+
+                $("#loader").hide();
+                newUser();
+                $("#loginid").prop("disabled", true);
+                $("#hidd").val(resultData.success.Id);
+                $("#username").val(resultData.success.Full_Name);
+                $("#loginid").val(resultData.success.Login_Id);
+                $("#emailid").val(resultData.success.Email_Id);
+                $("#selectroleid").val(resultData.success.Roles);
+                $("#pwdid").val(resultData.success.Password);
+                $("#cpwdid").val(resultData.success.Password);
+                if (resultData.success.Active == true) {
+                    $("#activeid").prop("checked", true);
+
+                }
+                else {
+                    $("#activeid").prop("checked", false);
+
+                }
+                $("#usave").val("Update");
+            }
+        });
+
+    }
+
+
+    function userDelete(Id) {
+        if (confirm("Are you sure to delete user ?")) {
+            $("#loader").show();
+            $.ajax({
+                type: 'POST',
+                url: "/Home/deleteEntry?Id=" + Id,
+                success: function (resultData) {
+                    if (resultData.success == "Can Not Delete User Untill Entry Created By this user Exists") {
+                        alert(resultData.success);
+                        $("#loader").hide();
+
+                    } else {
+                        $("#loader").hide();
+                        load();
+                    }
+
+                }
+            });
+        }
+    }
+
+    function Cancel() {
+        $("#loader").hide();
+        $("#loginid").prop("disabled", false);
+        $("#usave").val("Save");
+        $("#username").removeClass("invalid");
+        $("#username").prop("disabled", true);
+        $("#usernameerr").html("");
+
+        $("#loginid").removeClass("invalid");
+        $("#loginid").prop("disabled", true);
+        $("#loginerr").html("");
+
+        $("#emailid").removeClass("invalid");
+        $("#emailid").prop("disabled", true);
+        $("#emailerr").html("");
+
+
+        $("#pwdid").removeClass("invalid");
+        $("#pwdid").prop("disabled", true);
+        $("#pwderr").html("");
+
+        $("#cpwdid").removeClass("invalid");
+        $("#cpwdid").prop("disabled", true);
+        $("#cpwderr").html("");
+        $("#username").val("");
+        $("#loginid").val("");
+        $("#emailid").val("");
+        $("#selectroleid").val("--Select--");
+        $("#pwdid").val("");
+        $("#cpwdid").val("");
+        $("#activeid").prop("checked", false);
+        $("#activeid").prop("disabled", true);
+
+        /////////
+        $("#selectroleid").prop("disabled", true);
+        $("#exportExcel").prop("disabled", false);
+        $("#adduser").prop("disabled", false);
+
+        $("#usave").prop("disabled", true);
+        $("#ucancel").prop("disabled", true);
+
+    };
+
+
+    function Export() {
+        window.location.href = '/Home/ExportToExcel';
+    }
+
+
+</script>
+

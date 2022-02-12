@@ -1,0 +1,188 @@
+﻿@using QA_WebApp.Models;
+@{
+    ViewBag.Title = "Home Page";
+
+}
+<style>
+    .card {
+        /* Add shadows to create the "card" effect */ box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+    }
+        /*/ On mouse-over, add a deeper shadow */ .card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        }
+
+    .welheader {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 20px;
+        padding-top: 4px;
+    }
+
+    .home-kb-search {
+        margin-bottom: 30px;
+    }
+</style>
+<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 card" style="height:70px;background-color:ghostwhite;border-top:2px solid #50525f;margin-top:-30px;">
+
+    <div>
+        <span class="welheader">Welcome ! <b>@Session["FullName"].ToString() (@Session["Role"].ToString())</b></span>
+        <div>
+            <span>HOME / <span style="color: #4285f4;">DASHBOARD</span></span>
+        </div>
+    </div>
+</div>
+
+<br />
+
+
+@if (Session["Role"].ToString() == "Inspector")
+{
+
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 " style="height:120px;">
+
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 card" style="height: 120px; width: 250px; background-color: #4285f4; margin-left: 10px; margin-top: 2px; ">
+            <span class="welheader" style="color:white"><b>Pending Questions</b></span>
+            <hr />
+            <div>
+                <span style="color:white;font-size:15px;float:left">Count : <b>0</b></span> <a href='@Url.Action("PendingList", "Home")'> <span style="color:white;font-size:15px;float:right">View</span> </a>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 card" style="height: 120px; width: 250px; background-color: #4285f4; margin-left: 10px; margin-top: 2px; ">
+            <span class="welheader" style="color:white"><b>Recent Questions</b></span>
+            <hr />
+            <div>
+                <span style="color:white;font-size:15px;float:left">Count : <b>0</b></span> <a href='@Url.Action("RecentTicket", "Home")'> <span style="color:white;font-size:15px;float:right">View</span> </a>
+            </div>
+        </div>
+
+
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 card" style="height: 120px; width: 250px; background-color: #4285f4; margin-left: 10px; margin-top: 2px; ">
+            <span class="welheader" style="color:white"><b>Answered Question</b></span>
+            <hr />
+            <div>
+                <span style="color:white;font-size:15px;float:left">Count : <b>0</b></span>  <a href='@Url.Action("AnsweredTicket", "Home")'> <span style="color:white;font-size:15px;float:right">View</span> </a>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 card" style="height: 120px; width: 250px; background-color: #4285f4; margin-left: 10px;margin-top:2px;">
+            <span class="welheader" style="color:white"><b>Approved Question</b></span>
+            <hr />
+            <div>
+                <span style="color:white;font-size:15px;float:left">Count : <b>0</b></span> <a href='@Url.Action("ApprovedTicket", "Home")'> <span style="color:white;font-size:15px;float:right">View</span> </a>
+            </div>
+        </div>
+
+    </div>
+
+
+
+}
+
+else if (Session["Role"].ToString() == "Approver" || Session["Role"].ToString() == "Admin")
+{
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 " style="height:120px;">
+
+        @if (Session["Role"].ToString() == "Admin")
+        {
+            <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 card" style="height: 120px; width: 250px; background-color: #4285f4; margin-left: 10px; margin-top: 2px; ">
+                <span class="welheader" style="color:white;margin-top:5px;"><b>Question</b></span>
+                <hr />
+                <div>
+                    <span style="color:white;font-size:15px;float:left">Count : <b>0</b></span> <a href='@Url.Action("Ticket_List", "Home")'> <span style="color:white;font-size:15px;float:right">View</span> </a>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 card" style="height: 120px; width: 250px; background-color: #4285f4; margin-left: 10px; margin-top: 2px; ">
+                <span class="welheader" style="color:white"><b>Pending Question</b></span>
+                <hr />
+                <div>
+                    <span style="color:white;font-size:15px;float:left">Count : <b>0</b></span> <a href='@Url.Action("PendingList", "Home")'> <span style="color:white;font-size:15px;float:right">View</span> </a>
+                </div>
+            </div>
+        }
+
+
+
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 card" style="height: 120px; width: 250px; background-color: #4285f4; margin-left: 10px; margin-top: 2px; ">
+            <span class="welheader" style="color:white;margin-top:5px;"><b>Approval Question</b></span>
+            <hr />
+            <div>
+                <span style="color:white;font-size:15px;float:left">Count : <b>0</b></span> <a href='@Url.Action("ApprovalPending", "Home")'> <span style="color:white;font-size:15px;float:right">View</span> </a>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 card" style="height: 120px; width: 250px; background-color: #4285f4; margin-left: 10px; margin-top: 2px; ">
+            <span class="welheader" style="color:white;margin-top:5px;"><b>Recent Question</b></span>
+            <hr />
+            <div>
+                <span style="color:white;font-size:15px;float:left">Count : <b>0</b></span> <a href='@Url.Action("RecentTicket", "Home")'> <span style="color:white;font-size:15px;float:right">View</span> </a>
+            </div>
+        </div>
+
+
+        @*<div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 card" style="height: 120px; width: 250px; background-color: #4285f4; margin-left: 10px; margin-top: 2px; ">
+                <span class="welheader" style="color:white"><b>Answered Ticket</b></span>
+                <hr />
+                <div>
+                    <span style="color:white;font-size:15px;float:left">Count : <b>@count1</b></span>  <a href='@Url.Action("AnsweredTicket", "Home")'> <span style="color:white;font-size:15px;float:right">View</span> </a>
+                </div>
+            </div>*@
+
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 card" style="height: 120px; width: 250px; background-color: #4285f4; margin-left: 10px;margin-top:2px;">
+            <span class="welheader" style="color:white;margin-top:5px;"><b>Approved Question</b></span>
+            <hr />
+            <div>
+                <span style="color:white;font-size:15px;float:left">Count : <b>0</b></span> <a href='@Url.Action("ApprovedTicket", "Home")'> <span style="color:white;font-size:15px;float:right">View</span> </a>
+            </div>
+        </div>
+
+
+    </div>
+
+
+}
+else
+{
+    <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 " style="height:120px;">
+
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 card" style="height: 120px; width: 250px; background-color: #4285f4; margin-left: 10px;margin-top:2px;">
+            <span class="welheader" style="color:white"><b>Ticket</b></span>
+            <hr />
+            <div>
+                <span style="color:white;font-size:15px;float:left">Count : <b>0</b></span> <a href='@Url.Action("Ticket_List", "Home")'> <span style="color:white;font-size:15px;float:right">View</span> </a>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 card" style="height: 120px; width: 250px; background-color: #4285f4; margin-left: 10px; margin-top: 2px; ">
+            <span class="welheader" style="color:white"><b>Pending Ticket</b></span>
+            <hr />
+            <div>
+                <span style="color:white;font-size:15px;float:left">Count : <b>0</b></span> <a href='@Url.Action("PendingList", "Home")'> <span style="color:white;font-size:15px;float:right">View</span> </a>
+            </div>
+        </div>
+
+
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 card" style="height: 120px; width: 250px; background-color: #4285f4; margin-left: 10px; margin-top: 2px; ">
+            <span class="welheader" style="color:white"><b>Answered Ticket</b></span>
+            <hr />
+            <div>
+                <span style="color:white;font-size:15px;float:left">Count : <b>0</b></span>  <a href='@Url.Action("AnsweredTicket", "Home")'> <span style="color:white;font-size:15px;float:right">View</span> </a>
+            </div>
+        </div>
+
+
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3 card" style="height: 120px; width: 250px; background-color: #4285f4; margin-left: 10px; margin-top: 2px; ">
+            <span class="welheader" style="color:white"><b>Recent Ticket</b></span>
+            <hr />
+            <div>
+                <span style="color:white;font-size:15px;float:left">Count : <b>0</b></span> <a href='@Url.Action("RecentTicket", "Home")'> <span style="color:white;font-size:15px;float:right">View</span> </a>
+            </div>
+        </div>
+
+
+    </div>
+
+}
+
+

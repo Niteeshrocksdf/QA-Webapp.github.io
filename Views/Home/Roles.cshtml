@@ -1,0 +1,280 @@
+﻿
+@{
+    ViewBag.Title = "Roles";
+}
+<link href="~/Content/Datatable/Bootstrap_datatable.css" rel="stylesheet" />
+<link href="~/Content/Datatable/Responsive_datatable.css" rel="stylesheet" />
+
+<style>
+    .card {
+        /* Add shadows to create the "card" effect */ box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.1s;
+    }
+
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 15px;
+        height: 25px;
+        width: 25px;
+        background-color: #eee;
+    }
+
+    div.dataTables_wrapper div.dataTables_filter {
+        text-align: right;
+        display: none;
+    }
+
+    .invalid {
+        border: 2px solid red;
+    }
+
+    label {
+        display: inline-block;
+        max-width: 100%;
+        margin-bottom: 5px;
+        font-weight: 700;
+    }
+
+    .center-circle {
+        position: fixed;
+        margin: 0 auto;
+        bottom: 200px;
+        left: 0;
+        right: 0;
+        z-index: 1;
+    }
+
+    .welheader {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 20px;
+        padding-top: 4px;
+    }
+</style>
+
+
+<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 card" style="height:70px;background-color:ghostwhite;border-top:2px solid #50525f;margin-top:-30px;">
+
+    <div>
+        <span class="welheader"><b>User Roles</b></span>
+        <div>
+            <span>HOME / <span style="color: #4285f4;">USER ROLES</span></span>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12 col-sm-12 col-xs-12 card " style="background-color:ghostwhite;height:70vh ;overflow:auto;margin-top:20px;">
+
+    <!--Loader-->
+    <img src="~/Images/ajax-loader (4).gif" id="loader" class="center-circle" />
+    <!---->
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div style="margin-left:-33px;">
+            <div class="col-md-12">
+                @*<label>
+                        Role Name
+                    </label>*@
+                <input id="rolename" type="text" class="form-control" maxlength="20" placeholder="Enter Role Name..." />
+                <input type="hidden" id="hidd" />
+                <span id="roleameerr" style="font-size:0.9em;color:red"></span>
+            </div>
+            <div class="col-md-1">
+                <input type="submit" id="usave" style="background-color: #4285f4 !important; border: none;  color: white; padding: 10px 28px; text-align: center; text-decoration: none; display: inline-block; margin-left: 5px; font-size: 12px;border-radius:5px;" value="Save" onclick="Save();" />
+            </div>
+            <div class="col-md-1">
+                <input type="submit" style="background-color: #4285f4 !important; border: none; color: white; padding: 10px 28px; text-align: center; text-decoration: none; display: inline-block; margin-left: 5px; font-size: 12px; border-radius: 5px;" value="Cancel" onclick="Cancel();" />
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div style="margin-top:5%;">
+        <div class="col-md-12" style="border-top: 2px solid gray;">
+            <div class="col-md-6">
+
+            </div>
+            <div class="col-md-6" style="margin-top:5px;">
+                <input id="adduser" type="submit" style="background-color: #4285f4 !important; border: none; float: right; color: white; padding: 10px 28px; text-align: center; text-decoration: none; display: inline-block; margin-left: 5px; font-size: 12px; border-radius: 5px; " value="Add Role" onclick="newrole();" />
+
+                <script>
+                    function newrole() {
+                        Cancel();
+                        $("usave").val("Save");
+                        $("input").prop("disabled", false);
+
+                    }
+                </script>
+
+            </div>
+
+        </div>
+    </div>
+    <table id="roletbl" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%;margin-top:10px;">
+        <thead>
+            <tr>
+                @*<th>
+                       Role ID
+                    </th>*@
+                <th>
+                    Role Name
+                </th>
+                @*<th>
+                      Created By
+                    </th>*@
+                <th>
+                    Created date
+                </th>
+                <th>
+                    Action
+                </th>
+
+            </tr>
+        </thead>
+    </table>
+</div>
+<script src="~/Scripts/jquery-3.4.1.slim.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#loader").hide();
+        $("input").prop("disabled", true);
+        $("#exportExcel").prop("disabled", false);
+        $("#adduser").prop("disabled", false);
+
+        load();
+
+    });
+
+    $(document).keypress(function () {
+        $("#rolename").removeClass("invalid");
+        $("#roleameerr").html("");
+
+
+    });
+
+
+
+
+    function Save() {
+
+            var rolename = $("#rolename").val();
+                if (rolename == "") {
+                    $("#roleameerr").html("Role Name should not blank!");
+                    $("#rolename").addClass("invalid");
+                    $("#rolename").focus();
+                    return false;
+                }
+            $("#loader").show();
+            //To save data using ajax
+            $.ajax({
+                type: 'POST',
+                url: "/Home/AddRole?rolename=" + rolename,
+                success: function (resultData) {
+                    $("#loader").hide();
+                    if (resultData.success == "Role Created") {
+                        load();
+                        $("#rolename").val("");
+
+                    }
+                    else {
+                        $("#loader").hide();
+                        $("#rolename").html("Login Id is already Exist!");
+                        $("#rolename").focus();
+                    }
+
+                }
+            });
+
+
+
+    }
+
+    function load() {
+        $("#roletbl").DataTable({
+            stateSave: true,
+            "bDestroy": true,
+            "ajax": {
+                "url": "/Home/GetRoles",
+                "type": "POST",
+                "datatype": "json"
+            },
+
+
+
+            "columns": [
+                //{ "data": "Role_Id", "name": "Role_Id", "autoWidth": true },
+                { "data": "Role_Name", "name": "Role_Name", "autoWidth": true },
+                //{ "data": "Created_By", "title": "Created_By", "name": "Created_By", "autoWidth": true },
+                  {
+                      "data": "Created_Date", "title": "Created_Date", "name": "Created_Date", "autoWidth": true,
+                      "render": function (data, type, row, meta) {
+                          var rowvalue = row["Created_Date"];
+                          var pattern = /Date\(([^)]+)\)/;
+                          var results = pattern.exec(rowvalue);
+                          var dt = new Date(parseFloat(results[1]));
+
+                          return '<label class="label label-success" style="font-size:14px;">' + (dt.getMonth() + 1) + "/" + dt.getDate() + "/" + dt.getFullYear() + '</label>';
+                      }
+
+                  },
+
+                {
+                    "data": "Action", "name": "Action", "autoWidth": true,
+                    "render": function (data, type, row, meta) {
+                        return ' <img src = "/Images/delete-sign.png" onclick = "userDelete(\'' + row.Role_Id + '\')"  style = "cursor: pointer;margin-left:20px;" title="Delete">';
+                    }
+
+                },
+
+
+            ]
+
+        });
+    }
+
+    function userDelete(Id) {
+        if(confirm("Delete Role?"))
+        {
+
+            $("#loader").show();
+            $.ajax({
+                type: 'POST',
+                url: "/Home/deleteRole?Id=" + Id,
+                success: function (resultData) {
+
+                    if (resultData.success == "Role Can not delete!!") {
+                        $("#loader").hide();
+                        alert(resultData.success);
+                    }
+                    else {
+                        $("#loader").hide();
+                        load();
+                    }
+
+                }
+            });
+        }
+
+    }
+
+    function Cancel() {
+        $("input").prop("disabled", true);
+        $("#exportExcel").prop("disabled", false);
+        $("#adduser").prop("disabled", false);
+      //  $("#rolename").prop("disabled", true);
+        $("#roleameerr").html("");
+        $("#rolename").removeClass("invalid");
+        $("#rolename").val("");
+
+    };
+
+
+    function Export() {
+        window.location.href = '/Home/ExportToExcel';
+    }
+
+
+</script>
+

@@ -1,0 +1,992 @@
+﻿
+@{
+
+    ViewBag.status = "p";
+}
+
+<link href="~/Content/jquery-te-1.4.0.css" rel="stylesheet" />
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js" charset="utf-8"></script>
+<script src="~/Content/jquery-te-1.4.0.min.js"></script>
+@*<link href="~/Content/jquery-te-1.4.0.css" rel="stylesheet" />
+    <script type="text/javascript" src="http://code.jquery.com/jquery.min.js" charset="utf-8"></script>
+    <script src="~/Content/jquery-te-1.4.0.min.js"></script>*@
+
+
+
+<style>
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        position: relative;
+        background-color: #fefefe;
+        margin: auto;
+        padding: 0;
+        border: 1px solid #888;
+        width: 80%;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+        -webkit-animation-name: animatetop;
+        -webkit-animation-duration: 0.4s;
+        animation-name: animatetop;
+        animation-duration: 0.4s;
+    }
+
+    /* Add Animation */
+    @@-webkit-keyframes animatetop {
+        from {
+            top: -300px;
+            opacity: 0;
+        }
+
+        to {
+            top: 0;
+            opacity: 1;
+        }
+    }
+
+    @@keyframes animatetop {
+        from {
+            top: -300px;
+            opacity: 0;
+        }
+
+        to {
+            top: 0;
+            opacity: 1;
+        }
+    }
+
+    /* The Close Button */
+    .close {
+        color: white;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    .modal-header {
+        padding: 2px 16px;
+        background-color: #5cb85c;
+        color: white;
+    }
+
+    .modal-body {
+        padding: 2px 16px;
+    }
+
+    .modal-footer {
+        padding: 2px 16px;
+        background-color: #5cb85c;
+        color: white;
+    }
+
+    .card {
+        /* Add shadows to create the "card" effect */ box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+    }
+
+        /*/ On mouse-over, add a deeper shadow */ .card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        }
+
+    .welheader {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 20px;
+        padding-top: 4px;
+    }
+
+    .home-kb-search {
+        margin-bottom: 30px;
+    }
+
+    .jqte {
+        margin: 1px 0 !important;
+        height: 130px;
+        /*min-width:572px;*/
+        width: 108%;
+    }
+
+    .jqte_tool.jqte_tool_1 .jqte_tool_label {
+        display: table-row !important;
+    }
+
+    .jqte_editor, .jqte_source {
+        min-height: 230px;
+        max-height: 230px;
+    }
+
+    .jqte_tool.jqte_tool_21 .jqte_tool_icon {
+        background-position: -418px 0;
+        display: none;
+    }
+
+    .jqte_toolbar {
+        display: none !important;
+    }
+
+    .modal-content {
+        width: 25%;
+    }
+
+    .modal-header {
+        padding: 2px 16px;
+        background-color: #4285f4 !important;
+        color: white;
+    }
+
+    .modal-footer {
+        padding: 2px 16px;
+        background-color: #4285f4 !important;
+        color: white;
+    }
+
+    .center-circle {
+        position: fixed;
+        margin: 0 auto;
+        top: 450px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1;
+    }
+</style>
+<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 card" style="height:70px;background-color:ghostwhite;border-top:2px solid #50525f;margin-top:-30px;">
+
+    <div>
+        @if (ViewBag.status == "Pending")
+        {
+            <span class="welheader"><b>Update Question</b></span>
+            <div>
+                <span>HOME / <span style="color: #4285f4;">UPDATE Question</span></span>
+                <a href="/Home/Pendinglist" style="float:right;text-decoration:underline;color:deepskyblue;font-size:20px;"><i class="glyphicon glyphicon-arrow-left"></i> Back </a>
+
+            </div>
+        }
+        else
+        {
+            <span class="welheader"><b>Generate Question</b></span>
+
+            <div>
+                <span>HOME / <span style="color: #4285f4;">GENERATE Question</span></span>
+                <a href="/Home/index" style="float:right;text-decoration:underline;color:deepskyblue;font-size:20px;"><i class="glyphicon glyphicon-arrow-left"></i> Back </a>
+            </div>
+        }
+
+
+    </div>
+</div>
+
+<br />
+
+
+@if (ViewBag.status == "Pending")
+{
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="mclose" class="" style="cursor:pointer;float:right" onclick="modalclose();">&times;</span>
+                <h4>Attached Files</h4>
+            </div>
+            <div class="modal-body">
+                <p>Image :</p>
+                @{
+                    var imgs = ViewBag.Attachment_Image;
+                    string[] img1 = imgs.Split(',');
+                }
+                @if (imgs != "")
+                {
+                    foreach (string imgbind in img1)
+                    {
+
+                        <a href="http://@Request.Url.Authority/File/Img/@imgbind" target="_blank"><img src="~/File/Img/@imgbind" style="width:60px;height:60px;border: 2px solid gray;" /></a> @*<span style="color:red;cursor:pointer">&times;</span>*@
+
+                    }
+                }
+                else
+                {
+
+                    <img src="~/Images/no-image-icon-6.png" style="width:60px;height:60px;" />
+                }
+                <p>Audio :</p>
+                @{
+                    var audio1 = ViewBag.Attachment_Audio;
+                    string[] au1 = audio1.Split(',');
+                }
+                @foreach (string audiobind in au1)
+                {
+                    if (audiobind != "")
+                    {
+                        <a href="http://@Request.Url.Authority/File/Audio/@audiobind" target="_blank" style="color:deepskyblue;text-decoration:underline">@audiobind</a> @*<span style="color:red;cursor:pointer">&times;</span>*@
+                    }
+                }
+                <p>Video</p>
+                @{
+                    var vdio1 = ViewBag.Attachment_Video;
+                    string[] vd1 = vdio1.Split(',');
+                }
+                @foreach (string videobind in vd1)
+                {
+                    if (videobind != "")
+                    {
+                        <a href="http://@Request.Url.Authority/File/Video/@videobind" target="_blank" style="color:deepskyblue;text-decoration:underline">@videobind</a> @*<span style="color:red;cursor:pointer">&times;</span>*@
+                    }
+
+
+                }
+                <p>Document :</p>
+                @{
+                    var docs1 = ViewBag.Attachment_Doc;
+                    string[] doc1 = docs1.Split(',');
+                }
+                @foreach (string docbind in doc1)
+                {
+                    if (docbind != null)
+                    {
+                        <a href="http://@Request.Url.Authority/File/Document/@docbind" target="_blank" style="color:deepskyblue;text-decoration:underline">@docbind</a> @*<span style="color:red;cursor:pointer">&times;</span>*@
+                    }
+
+
+                }
+
+                <hr style="border:5px solid gray" />
+                <label>Update Attach File :</label>
+                <div><input id="file1" type="file" class="form-control" name="file" style="max-width:1000px" accept=".jpg,.jpeg,.png,.doc,.docx,.pdf,.mp3,.mp4" multiple></div>
+                <span style="color:green">allow only .jpg , .jpeg , .png, .doc , .docx , .pdf , .mp3 , .mp4 ! </span>
+
+            </div>
+        </div>
+
+    </div>
+}
+else
+{
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="mclose" class="" style="cursor:pointer;float:right" onclick="modalclose();">&times;</span>
+                <h4>Ticket Status</h4>
+            </div>
+            <div class="modal-body">
+                <p>Ticket generated successfully <b id="tickno">#</b></p>
+            </div>
+        </div>
+
+    </div>
+
+}
+
+<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12" style="margin-top:-10px;">
+
+    <div class="col-md-7 col-xs-7 col-sm-7 col-lg-7 " style="background-color:ghostwhite;">
+        <div class="card" style="min-height: 500px;border-top:2px solid #50525f">
+            <div class="row" style="margin-top:5px;margin-left:2px;margin-right:2px;">
+                <div class="col-lg-3">
+                    <label>Name :</label>
+                    <input type="text" id="txtname" class="form-control" placeholder="Enter Name" style="max-width:630px" value="" readonly />
+                </div>
+                <div class="col-lg-3">
+                    <label>Email :</label>
+                    <input type="text" id="txtemail" class="form-control" placeholder="Enter Email" style="max-width:630px" value="" readonly />
+                </div>
+                <div class="col-lg-3">
+                    <label>Source of Query :</label>
+                    <select id="txtsourcequery" class="form-control" style="max-width:630px">
+                        <option>--Select--</option>
+                        <option>Self</option>
+                        <option>Call</option>
+                        <option>Whatsapp Message</option>
+                        <option>Email</option>
+                    </select>
+                    <span id="errtxtsourcequery" style="color:red;font-size:0.8em;width:117px;"></span>
+                </div>
+                <div class="col-lg-3">
+                    <label>Subject :</label>
+                    <input id="txtsubject" type="text" class="form-control" placeholder="Enter Subject" style="text-transform:capitalize" maxlength="30" />
+                    <span id="errtxtsubject" style="color:red;font-size:0.8em"></span>
+                </div>
+            </div>
+            <div class="row" style="margin-left:2px;margin-right:2px;">
+                <div class="col-md-11">
+                    <label>Query :</label>
+                    <textarea id="querytxt" name="textarea" class="form-control" style="text-transform:capitalize;overflow-y:scroll;max-width:821px;min-height:100px;"></textarea>
+                    <span id="errquerytxt" style="color:red;font-size:0.8em"></span>
+                    @*<script>
+                        $('.jqte-test').jqte();
+
+                        // settings of status
+                        var jqteStatus = true;
+                        $(".status").click(function () {
+                            jqteStatus = jqteStatus ? false : true;
+                            $('.jqte-test').jqte({ "status": jqteStatus })
+                        });
+                    </script>*@
+                </div>
+            </div>
+            <div class="row" style="margin-left:2px;margin-right:2px;">
+                <div class="col-md-3">
+                    <label>Q Level 1:</label>
+                    <select id="qgrplv1" class="form-control" style="max-width:630px;text-transform:capitalize" onchange="Changeqgrp1();">
+                        <option>--Select--</option>
+                        @*@foreach (var lst in ViewBag.qgrplv1)
+                            {
+                                <option style="text-transform:capitalize" value="@lst.Code">@lst.Name</option>
+
+                            }*@
+                    </select>
+                    <span id="errqgrplv1" style="color:red;font-size:0.8em"></span>
+                </div>
+                <div class="col-md-3">
+                    <label>Q Level 2:</label>
+                    <select id="qgrplv2" class="form-control" style="max-width:630px;text-transform:capitalize">
+                        <option>--Select--</option>
+
+                    </select>
+                    <span id="errqgrplv2" style="color:red;font-size:0.8em"></span>
+                </div>
+
+                <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+                    <label>Priority:</label>
+                    <select id="txtpriority" class="form-control" style="max-width:630px">
+                        <option>--Select--</option>
+                        <option>High</option>
+                        <option>Medium</option>
+                        <option>Low</option>
+                    </select>
+                    <span id="errtxtpriority" style="color:red;font-size:0.8em"></span>
+
+                </div>
+
+            </div>
+            <div class="row" style="margin-left:2px;margin-right:2px;">
+
+
+                <div class="col-md-9 col-xs-9 col-sm-9 col-lg-9">
+                    @if (ViewBag.status == "Pending")
+                    {
+                        <label style="margin-top:10px;">Files :</label>
+                        <p style="text-decoration:underline;color:deepskyblue;cursor:pointer;" onclick="openattac();">Attachments</p>
+                    }
+                    else
+                    {
+                        <label>Upload multiple File :</label>
+                        <div><input id="file1" type="file" class="form-control" name="file" style="max-width:1000px" accept=".jpg,.jpeg,.png,.doc,.docx,.pdf,.mp3,.mp4" multiple></div>
+                        <span style="color:green">allow only .jpg , .jpeg , .png, .doc , .docx , .pdf , .mp3 , .mp4 ! </span>
+                    }
+
+                </div>
+            </div>
+            <div class="row" style="margin-left:2px;margin-right:2px;">
+                <div class="row">
+                    <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+
+                    </div>
+                    <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" style="margin-top: 20px;">
+                        <input type="submit" id="btnclient" style="width:130px;background-color: #4285f4; border: none; color: white; padding: 10px 28px; text-align: center; text-decoration: none; display: inline-block; margin-left: 5px; float: left; font-size: 12px; border-radius: 5px; " value="Submit" onclick="submitclientarea();" />
+                        <img id="indicatorsubmit" src="~/Images/indicator.gif" style="float:right;margin-top:10px;" />
+                    </div>
+                    <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" style="margin-top: 20px;">
+                        <input type="submit" id="" style="width:130px;background-color: #4285f4; border: none; color: white; padding: 10px 28px; text-align: center; text-decoration: none; display: inline-block; margin-left: 5px; float: left; font-size: 12px; border-radius: 5px;" value="Clear" onclick="fillclear();" />
+                    </div>
+                    <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5 col-xs-5 col-sm-5 col-lg-5 " style="background-color:ghostwhite;">
+        <div class="card" style="height: 500px;border-top:2px solid #50525f;overflow-y:scroll">
+            <div style="background-color:#4285f4;height:50px;text-align:center;">
+                <span style="font-size:1.2VW;font-weight:bold;color:white;padding:10px;">knowledgebase Questions Search</span>
+
+            </div>
+
+            <div style="margin-left:10px;margin-top:10px;color:blue;text-transform:uppercase">
+                <img id="indicatorsearch" src="~/Images/indicator.gif" style="margin:0 auto;display:block" />
+                <div id="searcknwbase">
+
+                </div>
+                <br />
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+
+<script type="text/javascript">
+    var ii;
+    $(document).ready(function () {
+        $("#indicatorsubmit").hide();
+        $("#indicatorsearch").hide();
+
+        var status = '@ViewBag.status';
+        if (status == "Pending") {
+
+            $("#btnclient").val("Update");
+            $("#txtsourcequery").val('@ViewBag.soq');
+            $("#txtsubject").val('@ViewBag.subject');
+            $("#txtpriority").val('@ViewBag.priority');
+        }
+        else {
+            $("#txtsourcequery").val('--Select--');
+            $("#txtpriority").val('--Select--');
+        }
+
+
+        var q = '@ViewBag.query';
+        var q1 = q.split('&');
+        $("div.jqte_editor").text(q1[0])
+        var qgrplv1 = '@ViewBag.qlv1';
+        if (qgrplv1 != "") {
+            $("#qgrplv1").val('@ViewBag.qlv1');
+            var query = '@ViewBag.query';
+            searchKnobase(query);
+        }
+        else {
+            $("#qgrplv1").val('--Select--');
+            var query = '@ViewBag.query';
+            if (query != "") {
+                searchKnobase(query);
+            }
+        }
+
+
+        loadChangeqgrp1();
+
+    });
+
+
+    $(document).keypress(function (event) {
+        $("#errtxtsubject").html("");
+        $("#errquerytxt").html("");
+        $("#errtxtpriority").html("");
+
+    });
+
+    $(document).change(function (event) {
+        $("#errtxtpriority").html("");
+        $("#errtxtsourcequery").html("");
+    });
+
+
+    $('.jqte_editor').bind('paste', function (e) {
+        var pastedText = e.originalEvent.clipboardData.getData('text');
+        if (pastedText != "") {
+
+            return false;
+        }
+        else {
+            alert("Image not allowed !")
+            return false;
+        }
+        //alert(pastedText);
+
+        if (pastedText.indexOf('data:image') !== -1 || pastedText.indexOf('src="data:image"') !== -1 || pastedText.indexOf('base64') !== -1) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+
+    $(".jqte_editor").keyup(function (event) {
+
+        var aa = $("#querytxt").val();
+        var len = aa.length;
+        if (len > 500) {
+
+            alert("maximum allowed length is 250 characters")
+            return false;
+        }
+
+        //  if (event.charCode == 32) {
+        searchKnobase();
+        // }
+
+    });
+
+
+
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the button that opens the modal
+    // var btn = document.getElementById("myBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal
+    btn.onclick = function () {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    function loadChangeqgrp1() {
+        var qgrplv1 = $("#qgrplv1").val();
+        $.ajax({
+            type: 'POST',
+            url: "/Home/BindQgrp2?&qgrplv1=" + qgrplv1,
+            success: function (resultData) {
+                if (resultData.data.length != 0) {
+                    $("#qgrplv2").empty();
+                    $("#qgrplv2").append("<option value=''>--Select--</option>");
+                    for (var i = 0; i < resultData.data.length; i++) {
+                        $("#qgrplv2").append("<option value='" + resultData.data[i].Code + "'>" + resultData.data[i].Name + "</option>");
+
+                    }
+                    $("#qgrplv2").val('@ViewBag.qlv2');
+                    $("#qgrplv3").empty();
+                    $("#qgrplv4").empty();
+                    $("#qgrplv3").append("<option value=''>--Select--</option>");
+                    $("#qgrplv4").append("<option value=''>--Select--</option>");
+
+                    loadChangeqgrp2();
+                }
+                else {
+                    $("#qgrplv2").empty();
+                    $("#qgrplv3").empty();
+                    $("#qgrplv4").empty();
+
+                    $("#qgrplv2").append("<option value=''>--Select--</option>");
+                    $("#qgrplv3").append("<option value=''>--Select--</option>");
+                    $("#qgrplv4").append("<option value=''>--Select--</option>");
+
+                }
+                //searchKnobase();
+                var second_lev = '@ViewBag.qlv2';
+                if (second_lev != "") {
+                    searchKnobase();
+                }
+            }
+        });
+
+
+    }
+
+    function Changeqgrp1() {
+
+        var qgrplv1 = $("#qgrplv1").val();
+        // To save data using ajax
+        $.ajax({
+            type: 'POST',
+            url: "/Home/BindQgrp2?&qgrplv1=" + qgrplv1,
+            success: function (resultData) {
+                if (resultData.data.length != 0) {
+                    $("#qgrplv2").empty();
+                    $("#qgrplv2").append("<option value=''>--Select--</option>");
+                    for (var i = 0; i < resultData.data.length; i++) {
+                        $("#qgrplv2").append("<option value='" + resultData.data[i].Code + "'>" + resultData.data[i].Name + "</option>");
+
+                    }
+                    $("#qgrplv3").empty();
+                    $("#qgrplv4").empty();
+                    $("#qgrplv3").append("<option value=''>--Select--</option>");
+                    $("#qgrplv4").append("<option value=''>--Select--</option>");
+                }
+                else {
+                    $("#qgrplv2").empty();
+                    $("#qgrplv3").empty();
+                    $("#qgrplv4").empty();
+
+                    $("#qgrplv2").append("<option value=''>--Select--</option>");
+                    $("#qgrplv3").append("<option value=''>--Select--</option>");
+                    $("#qgrplv4").append("<option value=''>--Select--</option>");
+
+                }
+                searchKnobase();
+            }
+        });
+
+
+    }
+
+
+    function loadChangeqgrp2() {
+
+        var qgrplv2 = $("#qgrplv2").val();
+        // To save data using ajax
+        $.ajax({
+            type: 'POST',
+            url: "/Home/BindQgrp3?&qgrplv2=" + qgrplv2,
+            success: function (resultData) {
+                if (resultData.data.length != 0) {
+                    $("#qgrplv3").empty();
+                    $("#qgrplv3").append("<option value=''>--Select--</option>");
+                    for (var i = 0; i < resultData.data.length; i++) {
+                        $("#qgrplv3").append("<option value='" + resultData.data[i].Code + "'>" + resultData.data[i].Name + "</option>");
+
+                    }
+                    $("#qgrplv3").val('@ViewBag.qlv3');
+                    loadChangeqgrp3();
+                }
+                else {
+                    $("#qgrplv3").empty();
+                    $("#qgrplv3").append("<option value=''>--Select--</option>");
+                    $("#qgrplv4").empty();
+                    $("#qgrplv4").append("<option value=''>--Select--</option>");
+
+                }
+                //searchKnobase();
+                var third_lev = '@ViewBag.qlv3';
+                if (third_lev != "") {
+                    searchKnobase();
+                }
+            }
+        });
+
+
+    }
+
+    function Changeqgrp2() {
+
+        var qgrplv2 = $("#qgrplv2").val();
+        // To save data using ajax
+        $.ajax({
+            type: 'POST',
+            url: "/Home/BindQgrp3?&qgrplv2=" + qgrplv2,
+            success: function (resultData) {
+
+                searchKnobase();
+            }
+        });
+
+
+    }
+
+
+
+    function submitclientarea() {
+        var id = '@ViewBag.id';
+        var clientname = $("#txtname").val();
+        var clientemail = $("#txtemail").val();
+        var soquery = $("#txtsourcequery").val();
+        var subject = $("#txtsubject").val();
+        var qgrplv1 = $("#qgrplv1").val();
+        var txtquery = $("#querytxt").val();
+        var txtquerydata = escape($("#querytxt").val());
+        // console.log(txtquerydata)
+        var qgrplv2 = $("#qgrplv2").val();
+        var qgrplv3 = $("#qgrplv3").val();
+        var qgrplv4 = $("#qgrplv4").val();
+        var txtpriority = $("#txtpriority").val();
+
+        //if (soquery == "--Select--") {
+
+        //    $("#errtxtsourcequery").html("Source of query should be select !..");
+        //    $("#txtsourcequery").focus();
+        //    return false;
+        //}
+
+        //if (subject == "") {
+        //    $("#errtxtsubject").html("Subject should be fill !..");
+        //    $("#txtsubject").focus();
+        //    return false;
+        //}
+
+
+        if (txtquery == "") {
+            $("#errquerytxt").html("Query should be fill !..");
+            $("#querytxt").focus();
+            return false;
+        }
+
+        if (txtpriority == "--Select--") {
+            $("#errtxtpriority").html("Priority should be fill !..");
+            $("#txtpriority").focus();
+            return false;
+        }
+
+        if (qgrplv1 == "--Select--") {
+
+            qgrplv1 = "";
+        }
+        if (qgrplv2 == "--Select--") {
+
+            qgrplv2 = "";
+        }
+        if (qgrplv3 == "--Select--") {
+
+            qgrplv3 = "";
+        }
+        if (qgrplv4 == "--Select--") {
+
+            qgrplv4 = "";
+        }
+
+        if (qgrplv1 == null) {
+
+            qgrplv1 = "";
+        }
+        if (qgrplv2 == null) {
+
+            qgrplv2 = "";
+        }
+        if (qgrplv3 == null) {
+
+            qgrplv3 = "";
+        }
+        if (qgrplv4 == null) {
+
+            qgrplv4 = "";
+        }
+
+        $("div").css("pointer-events", "none");
+
+        localStorage.setItem("subject", subject);
+
+        // ================ for image upload
+
+        var $file = document.getElementById('file1'),
+        $formData = new FormData();
+        if ($file.files.length > 4) {
+            alert("Upload only four files.");
+            $("div").css("pointer-events", "auto");
+            return false;
+        }
+        if ($file.files.length > 0) {
+            for (var i = 0; i < $file.files.length; i++) {
+
+                if ($file.files[i].type == "audio/mpeg") {
+
+                    if ($file.files[i].size > 5048576) {
+
+                        alert("Audio file is too large.")
+                        $("div").css("pointer-events", "auto");
+                        return false;
+                    }
+
+                }
+                if ($file.files[i].type == "image/png" || $file.files[i].type == "image/jpg" || $file.files[i].type == "image/jpeg") {
+
+                    if ($file.files[i].size > 1048576) {
+
+                        alert("Image file is too large.")
+                        $("div").css("pointer-events", "auto");
+                        return false;
+                    }
+
+                }
+                if ($file.files[i].type == "application/pdf" || $file.files[i].type == "application/doc" || $file.files[i].type == "application/docx") {
+
+                    if ($file.files[i].size > 1048576) {
+
+                        alert("Document file is too large.")
+                        $("div").css("pointer-events", "auto");
+                        return false;
+                    }
+
+                }
+
+                if ($file.files[i].type == "video/mp4") {
+
+                    if ($file.files[i].size > 110048576) {
+
+                        alert("Video file is too large.")
+                        $("div").css("pointer-events", "auto");
+                        return false;
+                    }
+
+                }
+                $formData.append('file-' + i, $file.files[i]);
+            }
+        }
+
+        $("#indicatorsubmit").show();
+        //===========End ========================//
+
+        // To save data using ajax
+        $.ajax({
+            url: '/Home/SaveGenerateQuery/?clientname=' + clientname + '&clientemail=' + clientemail + '&soquery=' + soquery + '&subject=' + subject + '&qgrplv1=' + qgrplv1 + '&txtquery=' + txtquerydata + '&qgrplv2=' + qgrplv2 + '&qgrplv3=' + qgrplv3 + '&qgrplv4=' + qgrplv4 + '&txtpriority=' + txtpriority + '&id=' + id,
+            type: 'POST',
+            data: $formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function ($data) {
+                $("#indicatorsubmit").hide();
+                if ($data.success != "Update Ticket Successfully !") {
+                    $("#txtsourcequery").val("--Select--");
+                    $("#txtsubject").val("");
+                    $(".jqte_editor").empty();
+
+                    $("#qgrplv1").val("--Select--");
+                    Changeqgrp1();
+                    Changeqgrp2();
+                  //  Changeqgrp3();
+                    $("#txtpriority").val("--Select--");
+
+                    document.getElementById("file1").value = null;
+                    $("#tickno").empty();
+                    $("#tickno").html($data.success);
+                    $("div").css("pointer-events", "auto");
+                    modal.style.display = "block";
+
+                }
+                else {
+                    $('div.modal-body').empty();
+                    window.location.href = '/Home/Pendinglist/';
+                    $("div").css("pointer-events", "auto");
+                }
+
+            }
+        });
+
+
+
+    }
+
+
+
+    function searchKnobase(query) {
+        if (query != undefined) {
+            var txtquery = query;
+        }
+        else {
+            var txtquery = $("#querytxt").val();
+        }
+        var qgrplv1 = $("#qgrplv1").val();
+        var qgrplv2 = $("#qgrplv2").val();
+        var qgrplv3 = $("#qgrplv3").val();
+        var qgrplv4 = $("#qgrplv4").val();
+
+        if (qgrplv1 == "--Select--") {
+
+            qgrplv1 = "";
+        }
+        if (qgrplv2 == "--Select--") {
+
+            qgrplv2 = "";
+        }
+        if (qgrplv3 == "--Select--") {
+
+            qgrplv3 = "";
+        }
+        if (qgrplv4 == "--Select--") {
+
+            qgrplv4 = "";
+        }
+
+        if (qgrplv1 == null) {
+
+            qgrplv1 = "";
+        }
+        if (qgrplv2 == null) {
+
+            qgrplv2 = "";
+        }
+        if (qgrplv3 == null) {
+
+            qgrplv3 = "";
+        }
+        if (qgrplv4 == null) {
+
+            qgrplv4 = "";
+        }
+
+
+        $("#indicatorsearch").show();
+        $.ajax({
+            url: '/Home/searchKnowBaseforclient/?txtquery=' + txtquery + '&cqgrplv1=' + qgrplv1 + '&cqgrplv2=' + qgrplv2 + '&cqgrplv3=' + qgrplv3 + '&cqgrplv4=' + qgrplv4,
+            data: '',
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function ($data) {
+                $("#indicatorsearch").hide();
+                var obj = new Object();
+                var arr = [];
+                $("#searcknwbase").empty();
+                if ($data.success != "not found") {
+                    for (var i = 0; i < $data.success.length ; i++) {
+                        if ($data.success[i].Group_Level_Code_1_Name == null) {
+                            $data.success[i].Group_Level_Code_1_Name = "";
+                        }
+                        if ($data.success[i].Group_Level_Code_2_Name == null) {
+                            $data.success[i].Group_Level_Code_2_Name = "";
+                        }
+                        if ($data.success[i].Group_Level_Code_3_Name == null) {
+                            $data.success[i].Group_Level_Code_3_Name = "";
+                        }
+                        if ($data.success[i].Group_Level_Code_4_Name == null) {
+                            $data.success[i].Group_Level_Code_4_Name = "";
+                        }
+                        $("#searcknwbase").append('  <p style="color:#337ab7;margin-top:10px;word-break: break-word;font-size:14px;"><b>Ques. : ' + $data.success[i].Query + '</b></p><p style="color:darkslategray;margin-top:5px;word-break: break-word;font-size:14px;"><label style="color:#64e864"> Answered : </label> ' + $data.success[i].Answer + '</p><p style="color:darkgrey;margin-top:5px;word-break: break-word;font-size:14px;"> Level : ' + $data.success[i].Group_Level_Code_1_Name + '<b> > </b>' + $data.success[i].Group_Level_Code_2_Name + '<b> > </b>' + $data.success[i].Group_Level_Code_3_Name + '<b> > </b>' + $data.success[i].Group_Level_Code_4_Name + '</p>')
+                    }
+                }
+
+            }
+        });
+    }
+
+
+
+    function modalclose() {
+
+        $("#myModal").hide();
+    }
+
+    function fillclear() {
+        $("#txtsourcequery").val("--Select--");
+        $("#txtsubject").val("");
+        $(".jqte_editor").empty();
+
+        $("#qgrplv1").val("--Select--");
+        Changeqgrp1();
+        Changeqgrp2();
+        Changeqgrp3();
+        $("#txtpriority").val("--Select--");
+
+        document.getElementById("file1").value = null;
+
+    }
+
+    function openattac() {
+        modal.style.display = "block";
+    }
+
+</script>
